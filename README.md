@@ -18,6 +18,24 @@ and none of the gloss the cleaner category trades in.
 
 Primary CTA: `brew install --cask gargantua`. GitHub and license purchase are secondary paths.
 
+## The app
+
+This repo is **just the website**. Gargantua itself — the native macOS cleaner with
+YAML-driven safety rules, local AI explainability via MLX, and an MCP server for
+agent-controlled cleanup — lives here:
+
+- **[inceptyon-labs/gargantua](https://github.com/inceptyon-labs/gargantua)** — the app
+- **[inceptyon-labs/gargantua-rules](https://github.com/inceptyon-labs/gargantua-rules)** — community cleanup & uninstall rules
+
+Install it:
+
+```bash
+brew tap inceptyon-labs/tap
+brew install --cask gargantua
+```
+
+Apple Silicon, macOS 14 (Sonoma) or newer.
+
 ## Stack
 
 - [Astro 5](https://astro.build) — static output, zero client JS by default

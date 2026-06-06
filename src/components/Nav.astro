@@ -1,0 +1,154 @@
+---
+import BrandMark from "./BrandMark.astro";
+
+const links = [
+  { href: "#trust", label: "How it works" },
+  { href: "#features", label: "Features" },
+  { href: "#difference", label: "Difference" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "https://github.com/inceptyon-labs/gargantua", label: "GitHub", external: true },
+];
+---
+
+<header
+  id="site-nav"
+  class="fixed inset-x-0 top-0 z-[100] border-b border-transparent transition-colors duration-300"
+  data-nav
+>
+  <nav
+    class="mx-auto flex h-16 max-w-[1180px] items-center gap-6 px-5 sm:px-8"
+    aria-label="Primary"
+  >
+    <a href="#top" class="flex items-center" aria-label="Gargantua home">
+      <BrandMark size={26} withWordmark />
+    </a>
+
+    <ul class="ml-auto hidden items-center gap-7 md:flex">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="navlink relative text-sm font-medium text-ink-2 transition-colors hover:text-ink aria-[current=true]:text-ink"
+              data-navlink={link.external ? undefined : link.href}
+              {...link.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {}}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <a
+      href="#install"
+      class="ml-auto inline-flex items-center gap-2 rounded-md bg-accent px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-bright focus-visible:bg-accent-bright md:ml-0"
+    >
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <path d="M7 10l5 5 5-5"></path>
+        <path d="M12 15V3"></path>
+      </svg>
+      Install
+    </a>
+  </nav>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>("[data-nav]");
+  if (nav) {
+    const onScroll = () => {
+      if (window.scrollY > 24) {
+        nav.classList.add(
+          "border-edge-soft",
+          "bg-void/80",
+          "backdrop-blur-md",
+        );
+      } else {
+        nav.classList.remove(
+          "border-edge-soft",
+          "bg-void/80",
+          "backdrop-blur-md",
+        );
+      }
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  // Scroll-spy: mark the nav link for the section currently in view.
+  const navLinks = new Map<string, HTMLAnchorElement>();
+  document
+    .querySelectorAll<HTMLAnchorElement>("[data-navlink]")
+    .forEach((a) => navLinks.set(a.dataset.navlink!.replace("#", ""), a));
+
+  if (navLinks.size && "IntersectionObserver" in window) {
+    const sections = [...navLinks.keys()]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const visible = new Set<string>();
+    const setActive = () => {
+      // topmost visible section wins
+      let best: { id: string; top: number } | null = null;
+      for (const id of visible) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top;
+        if (!best || top < best.top) best = { id, top };
+      }
+      navLinks.forEach((a, id) =>
+        a.setAttribute("aria-current", best?.id === id ? "true" : "false"),
+      );
+    };
+
+    const spy = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) visible.add(e.target.id);
+          else visible.delete(e.target.id);
+        }
+        setActive();
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    for (const s of sections) spy.observe(s);
+  }
+</script>
+
+<style>
+  /* Active nav link gets a short accretion underline. */
+  .navlink::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    height: 2px;
+    width: 100%;
+    border-radius: 2px;
+    background: var(--color-accretion);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease-out-quint);
+  }
+  .navlink[aria-current="true"]::after {
+    transform: scaleX(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .navlink::after {
+      transition: none;
+    }
+  }
+</style>

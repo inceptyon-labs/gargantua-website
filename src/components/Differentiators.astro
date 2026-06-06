@@ -1,0 +1,124 @@
+---
+const tools = ["Docker", "Homebrew", "Xcode", "pnpm", "Go", "Cargo"];
+
+const toolCommands = [
+  { cmd: "docker system df --format json", note: "parse, don't guess" },
+  { cmd: "xcrun simctl delete unavailable", note: null },
+  { cmd: "pnpm store prune", note: null },
+  { cmd: "go clean -cache", note: null },
+  { cmd: "go clean -modcache", note: null },
+];
+
+const smallFeatures = [
+  {
+    title: "Local-first, telemetry-free",
+    body: "The default explainer needs no network and no model. Optional local MLX inference runs entirely on Apple Silicon. Nothing phones home, ever.",
+    icon: `<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/>`,
+  },
+  {
+    title: "Trash-first, fully audited",
+    body: "Cleanup prefers the Trash over permanent delete, and every destructive attempt writes a record to an audit log you can read.",
+    icon: `<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6M14 11v6"/>`,
+  },
+  {
+    title: "Community-reviewed rules",
+    body: "Cleanup logic is a public, versioned ruleset, not a vendor secret. Each bundled rule records the exact upstream commit it shipped from.",
+    icon: `<circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>`,
+  },
+];
+---
+
+<section id="difference" class="scroll-mt-20 border-b border-edge-soft bg-void-deep py-20 sm:py-28">
+  <div class="mx-auto max-w-[1180px] px-5 sm:px-8">
+    <div class="reveal max-w-[46ch]">
+      <p class="t-marker mb-4">
+        <span class="text-accretion">//</span> what only Gargantua does
+      </p>
+      <h2 class="t-display">
+        Open, auditable, agent-drivable, explainable. End to end.
+      </h2>
+    </div>
+
+    <!-- wide feature: developer-native cleanup, paired with a real screenshot -->
+    <div
+      class="reveal mt-12 grid items-center gap-x-12 gap-y-8 overflow-hidden rounded-2xl border border-edge bg-surface-1 lg:grid-cols-[1fr_1.15fr]"
+      style="--reveal-delay: 80ms"
+    >
+      <div class="p-8 sm:p-10">
+        <h3 class="t-headline">Cleanup that speaks your toolchain</h3>
+        <p class="t-body mt-4 measure">
+          Gargantua doesn't blindly delete directories. For Docker, Homebrew,
+          Xcode, and your language toolchains, it runs each tool's own commands
+          and parses their output before it previews a single byte.
+        </p>
+        <ul class="mt-6 flex flex-wrap gap-2">
+          {
+            tools.map((tool) => (
+              <li class="rounded-md border border-edge-soft bg-surface-2 px-3 py-1.5 font-mono text-[0.8125rem] text-ink-2">
+                {tool}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="flex items-center border-t border-edge-soft p-6 sm:p-8 lg:border-l lg:border-t-0">
+        <div class="w-full overflow-hidden rounded-lg border border-edge bg-void-deep">
+          <div class="flex items-center gap-2 border-b border-edge-soft px-4 py-2.5">
+            <span class="flex gap-1.5" aria-hidden="true">
+              <span class="h-2.5 w-2.5 rounded-full bg-surface-4"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-surface-4"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-surface-4"></span>
+            </span>
+            <span class="t-caption font-mono">tool-native cleanup</span>
+          </div>
+          <div class="space-y-2 px-4 py-4 font-mono text-[0.8125rem] leading-relaxed">
+            {
+              toolCommands.map((c) => (
+                <div class="flex flex-wrap items-baseline gap-x-2">
+                  <span class="select-none text-accretion" aria-hidden="true">
+                    $
+                  </span>
+                  <code class="text-ink">{c.cmd}</code>
+                  {c.note && (
+                    <span class="text-ink-4"># {c.note}</span>
+                  )}
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- three smaller, distinct features -->
+    <div class="mt-6 grid gap-6 md:grid-cols-3">
+      {
+        smallFeatures.map((f, i) => (
+          <div
+            class="reveal rounded-2xl border border-edge bg-surface-1 p-7"
+            style={`--reveal-delay: ${120 + i * 80}ms`}
+          >
+            <span
+              class="grid h-10 w-10 place-items-center rounded-lg border border-edge-soft bg-surface-2 text-ink-2"
+              aria-hidden="true"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                set:html={f.icon}
+              />
+            </span>
+            <h3 class="t-title mt-5">{f.title}</h3>
+            <p class="t-body mt-2.5">{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

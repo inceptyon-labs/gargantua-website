@@ -1,0 +1,120 @@
+---
+// The last objections a skeptical developer raises before installing.
+// Native <details> accordion: accessible, progressive disclosure, no JS.
+const faqs = [
+  {
+    q: "Is it actually free, or is that a trial?",
+    a: "Building from source is free forever under AGPL-3.0, and that binary is fully unlocked, no trial, no nag. Scans always run free even in the prebuilt app. The $29 one-time license only unlocks the execution of destructive cleanups in that prebuilt build.",
+  },
+  {
+    q: "What does the cloud AI actually send?",
+    a: "Nothing, unless you turn it on. The default explainer is rule-based and needs no network. If you enable cloud AI with your own Anthropic key (stored in the macOS Keychain), it sends paths, sizes, and classifications only. File-content snippets stay off until you flip an explicit toggle, and they are capped at 4 KB and redacted for tokens and keys. There is a hard monthly spend cap.",
+  },
+  {
+    q: "Can it delete something it shouldn't?",
+    a: "The trust layer is built to stop exactly that. A bundled protected-roots policy hard-blocks cleanup at sensitive locations regardless of any rule, and no model, local or cloud, can lower a rating. Cleanup prefers the Trash over permanent delete, and every destructive attempt is written to an audit log.",
+  },
+  {
+    q: "How do I uninstall it?",
+    a: "It is a standard Mac app. Remove it with `brew uninstall --cask gargantua`, or drag it to the Trash. Gargantua's own Smart Uninstaller can also clean up the support files and launch agents an app leaves behind, including its own.",
+  },
+  {
+    q: "Does it phone home?",
+    a: "No. There is no telemetry and no analytics. The default engine runs entirely on your Mac, and local MLX inference, if you enable it, never leaves the device.",
+  },
+  {
+    q: "Which Macs does it run on?",
+    a: "Apple Silicon (M1 or newer) on macOS 14 Sonoma or later. Updates arrive in-app through the signed Sparkle channel.",
+  },
+];
+
+// Inline-code spans inside answers, rendered without a markdown dependency.
+function renderAnswer(text: string) {
+  return text
+    .split(/(`[^`]+`)/g)
+    .map((part) =>
+      part.startsWith("`") && part.endsWith("`")
+        ? { code: true, text: part.slice(1, -1) }
+        : { code: false, text: part },
+    );
+}
+---
+
+<section id="faq" class="border-b border-edge-soft bg-void py-20 sm:py-28">
+  <div class="mx-auto max-w-[820px] px-5 sm:px-8">
+    <div class="reveal">
+      <p class="t-marker mb-4"><span class="text-accretion">//</span> questions</p>
+      <h2 class="t-display">Questions a skeptic asks.</h2>
+    </div>
+
+    <div class="reveal mt-10 overflow-hidden rounded-2xl border border-edge bg-edge" style="--reveal-delay: 80ms">
+      <div class="grid gap-px">
+        {
+          faqs.map((faq) => (
+            <details class="faq-item group bg-surface-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5">
+                <span class="t-title pr-2">{faq.q}</span>
+                <svg
+                  class="faq-chevron shrink-0 text-ink-3 transition-transform duration-300"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </summary>
+              <p class="measure-wide px-6 pb-6 t-body">
+                {renderAnswer(faq.a).map((seg) =>
+                  seg.code ? (
+                    <code class="rounded bg-surface-3 px-1.5 py-0.5 font-mono text-[0.8125rem] text-ink-2">
+                      {seg.text}
+                    </code>
+                  ) : (
+                    seg.text
+                  ),
+                )}
+              </p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+
+    <p class="reveal mt-6 t-caption text-ink-3" style="--reveal-delay: 140ms">
+      Still deciding? The
+      <a
+        href="https://github.com/inceptyon-labs/gargantua"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-accent transition-colors hover:text-accent-bright"
+        >source is on GitHub</a
+      >, so you can read exactly what it does before it touches a file.
+    </p>
+  </div>
+</section>
+
+<style>
+  /* Native disclosure: hide the default marker, rotate our chevron on open. */
+  .faq-item > summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+  .faq-item summary:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+    border-radius: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-chevron {
+      transition: none;
+    }
+  }
+</style>

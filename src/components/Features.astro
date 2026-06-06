@@ -1,0 +1,167 @@
+---
+import { Image } from "astro:assets";
+import duplicatefinder from "../assets/screenshots/duplicatefinder.png";
+import diskexplorer from "../assets/screenshots/diskexplorer.png";
+import backgrounditems from "../assets/screenshots/backgrounditems.png";
+
+// Icons are lucide-style single-color strokes, kept in one place for coherence.
+const modules = [
+  {
+    name: "Deep Clean",
+    desc: "Browser and app caches, logs, temp files, Trash, installers, and language build caches, all rule-driven.",
+    icon: `<path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 4.8 7 3.6c-.29 1.2-1.14 2.43-2.29 3.46S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05Z"/><path d="M12.56 6.6A11 11 0 0 0 14 3.6c.44 1.2 1.3 2.42 2.46 3.45S18 11.1 18 12.25c0 2.22-1.8 4.05-4 4.05"/>`,
+  },
+  {
+    name: "Dev Purge",
+    desc: "A narrow scope locked to developer artifacts, so a routine sweep can't widen into a full scan.",
+    icon: `<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>`,
+  },
+  {
+    name: "Developer Tools",
+    desc: "Tool-native previews for Homebrew, Docker, Xcode simulators, pnpm, Go, and Cargo.",
+    icon: `<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/>`,
+  },
+  {
+    name: "Smart Uninstaller",
+    desc: "Removes an app plus the launch agents, preferences, and support files it leaves behind.",
+    icon: `<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>`,
+  },
+  {
+    name: "Duplicate Finder",
+    desc: "Groups duplicate bytes across your scan roots, backed by fclones. Review by default.",
+    icon: `<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>`,
+  },
+  {
+    name: "File Health",
+    desc: "Empty files, oversized files, near-duplicate images, and broken symlinks, via czkawka.",
+    icon: `<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>`,
+  },
+  {
+    name: "File Organizer",
+    desc: "Clusters loose files locally by type and date, then lets a model name the groups.",
+    icon: `<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>`,
+  },
+  {
+    name: "Disk Explorer",
+    desc: "An interactive treemap to trace where bytes accrete before you remove a thing.",
+    icon: `<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>`,
+  },
+  {
+    name: "Background Items",
+    desc: "Audit the launch agents, daemons, and login items that start with your Mac.",
+    icon: `<path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/>`,
+  },
+  {
+    name: "Processes",
+    desc: "A live look at what's running right now and the CPU and memory it's holding.",
+    icon: `<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/>`,
+  },
+  {
+    name: "AI Models",
+    desc: "A review-only profile for downloaded LLM and diffusion model storage, where re-downloads are costly.",
+    icon: `<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>`,
+  },
+  {
+    name: "Scheduled Scans",
+    desc: "launchd-backed background scans on an interval or cron, with skip-on-battery.",
+    icon: `<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>`,
+  },
+];
+
+const shots = [
+  {
+    src: duplicatefinder,
+    alt: "Gargantua's Duplicate Finder, ready to group duplicate files across scan roots with nothing selected by default",
+    title: "Duplicate Finder",
+    caption: "Group duplicate bytes across your filesystem.",
+  },
+  {
+    src: diskexplorer,
+    alt: "Gargantua's Disk Explorer, an interactive treemap of folder sizes across the home directory",
+    title: "Disk Explorer",
+    caption: "Trace where bytes accrete in your filesystem.",
+  },
+  {
+    src: backgrounditems,
+    alt: "Gargantua's Background Items view for scanning launch agents, daemons, and login items",
+    title: "Background Items",
+    caption: "Trace what starts itself, then decide what to trust.",
+  },
+];
+---
+
+<section id="features" class="scroll-mt-20 border-b border-edge-soft bg-void py-20 sm:py-28">
+  <div class="mx-auto max-w-[1180px] px-5 sm:px-8">
+    <div class="reveal max-w-[48ch]">
+      <p class="t-marker mb-4">
+        <span class="text-accretion">//</span> the whole machine
+      </p>
+      <h2 class="t-display">More than a cache cleaner.</h2>
+      <p class="t-body-lg mt-5">
+        Caches are the start. Gargantua reaches into duplicates, leftover apps,
+        disk hot spots, background daemons, running processes, and your developer
+        toolchain, every one of them gated by the same trust layer.
+      </p>
+    </div>
+
+    <!-- capabilities spec sheet: a list, not a grid of cards -->
+    <div
+      class="reveal mt-12 overflow-hidden rounded-2xl border border-edge bg-edge"
+      style="--reveal-delay: 80ms"
+    >
+      <ul role="list" class="grid gap-px sm:grid-cols-2">
+        {
+          modules.map((m) => (
+            <li class="flex items-start gap-4 bg-surface-1 p-5 sm:p-6">
+              <span
+                class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-edge-soft bg-surface-2 text-ink-2"
+                aria-hidden="true"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  set:html={m.icon}
+                />
+              </span>
+              <div class="min-w-0">
+                <h3 class="t-title">{m.name}</h3>
+                <p class="t-body mt-1.5">{m.desc}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- proof: real product surfaces -->
+    <div class="mt-6 grid gap-6 md:grid-cols-3">
+      {
+        shots.map((shot, i) => (
+          <figure
+            class="reveal overflow-hidden rounded-xl border border-edge bg-surface-1"
+            style={`--reveal-delay: ${120 + i * 80}ms`}
+          >
+            <Image
+              src={shot.src}
+              alt={shot.alt}
+              widths={[400, 640, 900]}
+              sizes="(max-width: 768px) 100vw, 360px"
+              class="block w-full border-b border-edge-soft"
+              loading="lazy"
+            />
+            <figcaption class="px-4 py-3">
+              <span class="t-label">{shot.title}</span>
+              <span class="t-caption mt-0.5 block">{shot.caption}</span>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>

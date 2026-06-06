@@ -1,0 +1,101 @@
+---
+// The black-box problem. Short, sharp, no fear-mongering.
+---
+
+<section class="border-b border-edge-soft bg-void py-20 sm:py-28">
+  <div class="mx-auto max-w-[1180px] px-5 sm:px-8">
+    <div class="grid gap-x-16 gap-y-8 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div class="reveal">
+        <h2 class="t-display measure">
+          Most cleaners want you to trust a number.
+        </h2>
+        <p class="t-body-lg measure mt-6">
+          The category runs on one move: surface a big
+          <span class="font-mono text-ink">“1,000 junk files found”</span>
+          figure, a reassuring checkmark, and a Clean button. You never see which
+          files, where they live, or why removing them is safe, so the number is
+          the only thing you have to go on, and you can't check it.
+        </p>
+        <p class="t-body measure mt-4">
+          That is a bad deal for anyone who knows what lives under
+          <span class="font-mono text-ink-2">~/Library</span>. Gargantua takes the
+          opposite position: nothing is removable until you can see the evidence.
+        </p>
+      </div>
+
+      <!-- the contrast, shown not told -->
+      <div class="reveal" style="--reveal-delay: 120ms">
+        <div class="grid gap-px overflow-hidden rounded-xl border border-edge bg-edge sm:grid-cols-2">
+          <div class="bg-surface-1 p-6">
+            <p class="t-caption font-mono uppercase tracking-wide text-ink-4">
+              Typical cleaner
+            </p>
+            <p class="mt-4 font-mono text-[2.25rem] font-semibold leading-none text-ink-3 tabular-nums">
+              1,000
+            </p>
+            <p class="t-caption mt-2">junk files found</p>
+            <ul class="mt-5 space-y-2.5">
+              {
+                ["Which files? Hidden.", "Why safe? Marketing copy.", "Reversible? Permanent delete."].map(
+                  (line) => (
+                    <li class="flex items-start gap-2 t-caption">
+                      <svg
+                        class="mt-px shrink-0"
+                        width="13"
+                        height="13"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="var(--color-ink-4)"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M18 6 6 18M6 6l12 12" />
+                      </svg>
+                      {line}
+                    </li>
+                  ),
+                )
+              }
+            </ul>
+          </div>
+
+          <div class="bg-surface-1 p-6">
+            <p class="t-caption font-mono uppercase tracking-wide text-accretion">
+              Gargantua
+            </p>
+            <p class="mt-4 font-mono text-[2.25rem] font-semibold leading-none text-ink tabular-nums">
+              287
+            </p>
+            <p class="t-caption mt-2">rules, each one auditable</p>
+            <ul class="mt-5 space-y-2.5">
+              {
+                ["Every item names its rule.", "Rating set before any UI sees it.", "Trash-first, with an audit log."].map(
+                  (line) => (
+                    <li class="flex items-start gap-2 t-caption">
+                      <svg
+                        class="mt-px shrink-0"
+                        width="13"
+                        height="13"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="var(--color-safe)"
+                        stroke-width="2.4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                      {line}
+                    </li>
+                  ),
+                )
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,116 @@
+---
+// The genuinely-unique feature: agent automation over MCP, with segregated
+// read-only and destructive registries and a hard protected-reject.
+
+const readOnly = ["scan_status", "list_findings", "explain_rule", "preview_cleanup"];
+const destructive = ["run_cleanup", "empty_trash"];
+---
+
+<section class="border-b border-edge-soft bg-void py-20 sm:py-28">
+  <div class="mx-auto max-w-[1180px] px-5 sm:px-8">
+    <div class="grid gap-x-14 gap-y-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+      <div class="reveal">
+        <p class="t-marker mb-4">
+          <span class="text-accretion">//</span> mcp server
+        </p>
+        <h2 class="t-display">Let an agent drive it. Under guardrails.</h2>
+        <p class="t-body-lg mt-5 measure">
+          Gargantua ships a local Model Context Protocol server, so Claude,
+          Cursor, or Claude Code can scan and run cleanups for you, which no
+          other cleaner on the Mac currently lets an agent do.
+        </p>
+        <p class="t-body mt-4 measure">
+          The catch that makes it safe: tools are split into two registries.
+          Read-only calls are always available. Destructive calls require an
+          explicit grant, bearer-token auth, and per-client rate limits, and a
+          <span class="text-protected">protected</span> item is rejected before the
+          tool ever runs.
+        </p>
+
+        <div class="mt-7 grid gap-4 sm:grid-cols-2">
+          <div class="rounded-lg border border-edge-soft bg-surface-1 p-4">
+            <div class="flex items-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span class="t-caption font-mono uppercase tracking-wide text-safe">Read-only</span>
+            </div>
+            <ul class="mt-3 space-y-1.5">
+              {readOnly.map((t) => (
+                <li class="t-mono-data text-ink-2">{t}</li>
+              ))}
+            </ul>
+          </div>
+          <div class="rounded-lg border border-edge-soft bg-surface-1 p-4">
+            <div class="flex items-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-review)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+              <span class="t-caption font-mono uppercase tracking-wide text-review">Destructive, gated</span>
+            </div>
+            <ul class="mt-3 space-y-1.5">
+              {destructive.map((t) => (
+                <li class="t-mono-data text-ink-2">{t}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- agent session log -->
+      <div class="reveal" style="--reveal-delay: 120ms">
+        <div class="overflow-hidden rounded-xl border border-edge bg-surface-1">
+          <div class="flex items-center gap-2 border-b border-edge-soft px-4 py-2.5">
+            <span class="flex gap-1.5" aria-hidden="true">
+              <span class="h-2.5 w-2.5 rounded-full bg-surface-4"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-surface-4"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-surface-4"></span>
+            </span>
+            <span class="t-caption font-mono">claude · gargantua-mcp</span>
+            <span class="ml-auto inline-flex items-center gap-1.5 t-caption font-mono text-ink-3">
+              <span class="inline-block h-1.5 w-1.5 rounded-full bg-safe"></span>
+              :7493
+            </span>
+          </div>
+
+          <div class="space-y-3.5 px-5 py-5 font-mono text-[0.8125rem] leading-relaxed">
+            <p class="text-ink-2">
+              <span class="text-accent">agent</span> &gt; free up space from old build caches
+            </p>
+
+            <div class="rounded-md border border-edge-soft bg-surface-2 px-3.5 py-2.5">
+              <p class="text-ink-3">
+                <span class="text-safe">→ preview_cleanup</span>(profile: "dev-purge")
+              </p>
+              <p class="mt-1.5 text-ink-2">
+                12 findings · <span class="text-ink">18.4 GB</span> reclaimable ·
+                <span class="text-safe">safe</span>
+              </p>
+            </div>
+
+            <div class="rounded-md border border-edge-soft bg-surface-2 px-3.5 py-2.5">
+              <p class="text-ink-3">
+                <span class="text-review">→ run_cleanup</span>(scope: "dev-purge", confirm: true)
+              </p>
+              <p class="mt-1.5 text-ink-2">
+                ✓ 18.4 GB moved to Trash · audit record written
+              </p>
+            </div>
+
+            <div
+              class="rounded-md border px-3.5 py-2.5"
+              style="border-color: color-mix(in oklab, var(--color-protected) 40%, transparent); background: color-mix(in oklab, var(--color-protected) 9%, transparent)"
+            >
+              <p class="text-ink-3">
+                <span class="text-protected">→ run_cleanup</span>(path: "~/Library/Keychains")
+              </p>
+              <p class="mt-1.5 text-protected">
+                ✗ rejected · path is <span class="font-semibold">protected</span>, not removable by any caller
+              </p>
+            </div>
+          </div>
+        </div>
+        <p class="t-caption mt-3 text-ink-3">
+          The protected-roots policy is bundled and deterministic, so the same
+          rejection applies whether the request comes from you or from a model.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

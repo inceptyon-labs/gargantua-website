@@ -1,0 +1,73 @@
+---
+import BrandMark from "./BrandMark.astro";
+
+const columns = [
+  {
+    title: "Project",
+    links: [
+      { label: "Source on GitHub", href: "https://github.com/inceptyon-labs/gargantua", external: true },
+      { label: "Cleanup rules", href: "https://github.com/inceptyon-labs/gargantua-rules", external: true },
+      { label: "Releases", href: "https://github.com/inceptyon-labs/gargantua/releases", external: true },
+      { label: "Changelog", href: "https://github.com/inceptyon-labs/gargantua/blob/main/CHANGELOG.md", external: true },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "MCP server", href: "https://github.com/inceptyon-labs/gargantua#mcp-server", external: true },
+      { label: "Safety model", href: "https://github.com/inceptyon-labs/gargantua#safety-model", external: true },
+      { label: "Contributing", href: "https://github.com/inceptyon-labs/gargantua/blob/main/CONTRIBUTING.md", external: true },
+      { label: "Security", href: "https://github.com/inceptyon-labs/gargantua/blob/main/SECURITY.md", external: true },
+    ],
+  },
+];
+---
+
+<footer class="bg-void py-14">
+  <div class="mx-auto max-w-[1180px] px-5 sm:px-8">
+    <div class="grid gap-10 sm:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <a href="#top" class="flex items-center" aria-label="Gargantua home">
+          <BrandMark size={26} withWordmark />
+        </a>
+        <p class="t-body mt-4 max-w-[34ch] text-ink-3">
+          A native macOS cleaner that scans, classifies, and explains before it
+          removes anything.
+        </p>
+      </div>
+
+      {
+        columns.map((col) => (
+          <nav aria-label={col.title}>
+            <h2 class="t-caption font-mono uppercase tracking-wide text-ink-4">
+              {col.title}
+            </h2>
+            <ul class="mt-4 space-y-2.5">
+              {col.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    target={link.external ? "_blank" : undefined}
+                    rel={link.external ? "noopener noreferrer" : undefined}
+                    class="text-sm text-ink-2 transition-colors hover:text-ink"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div class="mt-12 flex flex-col items-start justify-between gap-3 border-t border-edge-soft pt-6 sm:flex-row sm:items-center">
+      <p class="t-caption text-ink-4">
+        © 2026 Inceptyon Labs LLC. Released under AGPL-3.0.
+      </p>
+      <p class="t-caption font-mono text-ink-4">
+        Built for developers who read their own file paths.
+      </p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,73 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Gargantua: the Mac cleaner that shows its work",
+  description = "A native macOS cleaner for developers. Every file it removes traces to a named rule with a safe, review, or protected rating. Open source, telemetry-free, agent-drivable over MCP.",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#14161A" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content="/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[500] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+    >
+      Skip to content
+    </a>
+    <slot />
+
+    <script>
+      // Scroll reveal. Content ships visible; this only enhances when JS runs
+      // and motion is allowed. Headless renders and reduced-motion users get
+      // the fully-visible default.
+      const motionOK = window.matchMedia(
+        "(prefers-reduced-motion: no-preference)",
+      ).matches;
+
+      if (motionOK && "IntersectionObserver" in window) {
+        document.documentElement.setAttribute("data-reveal-ready", "");
+        const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-in");
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
+        );
+        for (const el of els) io.observe(el);
+      }
+    </script>
+  </body>
+</html>

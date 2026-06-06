@@ -1,0 +1,80 @@
+---
+import CopyCommand from "./CopyCommand.astro";
+
+const requirements = [
+  { label: "Apple Silicon", detail: "M1 or newer" },
+  { label: "macOS 14+", detail: "Sonoma or later" },
+  { label: "Signed & notarized", detail: "Sparkle auto-updates" },
+];
+---
+
+<section id="install" class="relative scroll-mt-20 overflow-hidden bg-void-deep py-24 sm:py-32">
+  <!-- bookend glow, echoing the hero -->
+  <div class="install-glow" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-[1180px] px-5 text-center sm:px-8">
+    <h2 class="reveal t-display mx-auto max-w-[18ch]">
+      Point it at your Mac. Watch it show its work.
+    </h2>
+    <p class="reveal t-body-lg measure-wide mx-auto mt-5" style="--reveal-delay: 80ms">
+      Two commands and you're running. Updates arrive in-app through the signed
+      Sparkle channel.
+    </p>
+
+    <div class="reveal mx-auto mt-9 max-w-xl text-left" style="--reveal-delay: 160ms">
+      <CopyCommand
+        lines={["brew tap inceptyon-labs/tap", "brew install --cask gargantua"]}
+      />
+    </div>
+
+    <ul class="reveal mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3" style="--reveal-delay: 240ms">
+      {
+        requirements.map((req) => (
+          <li class="flex items-center gap-2.5">
+            <span class="t-label text-ink">{req.label}</span>
+            <span class="t-caption text-ink-4">{req.detail}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="reveal mt-9 flex items-center justify-center gap-5" style="--reveal-delay: 300ms">
+      <a
+        href="https://github.com/inceptyon-labs/gargantua/releases"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-sm font-medium text-accent transition-colors hover:text-accent-bright"
+      >
+        Download the DMG instead
+      </a>
+      <span class="h-3 w-px bg-edge-em" aria-hidden="true"></span>
+      <a
+        href="https://github.com/inceptyon-labs/gargantua"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-sm font-medium text-ink-2 transition-colors hover:text-ink"
+      >
+        Read the source
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .install-glow {
+    position: absolute;
+    left: 50%;
+    bottom: -40%;
+    width: min(820px, 120vw);
+    aspect-ratio: 1.8 / 1;
+    translate: -50% 0;
+    background: radial-gradient(
+      50% 50% at 50% 50%,
+      color-mix(in oklab, var(--color-accretion) 22%, transparent) 0%,
+      transparent 70%
+    );
+    filter: blur(40px);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+</style>

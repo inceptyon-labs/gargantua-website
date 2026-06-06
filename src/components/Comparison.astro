@@ -1,0 +1,126 @@
+---
+const rows = [
+  {
+    dim: "What you delete",
+    typical: "“1,000 junk files found,” opaque",
+    garg: "Every item traces to a named rule with a safe / review / protected rating",
+  },
+  {
+    dim: "Why it's safe",
+    typical: "Marketing copy",
+    garg: "Per-item explanation from the rule's own metadata; AI can elaborate, never downgrade",
+  },
+  {
+    dim: "Who writes the rules",
+    typical: "Vendor, behind closed doors",
+    garg: "Public, reviewed PRs; every bundled rule records its upstream commit",
+  },
+  {
+    dim: "Automation",
+    typical: "A button in a GUI",
+    garg: "A local MCP server: Claude, Cursor, or Claude Code can run guarded cleanups",
+  },
+  {
+    dim: "AI",
+    typical: "Cloud, with your data",
+    garg: "On-device by default; cloud is opt-in, redacted, and spend-capped",
+  },
+  {
+    dim: "Reversibility",
+    typical: "Permanent delete",
+    garg: "Trash-first, with an audit log for every destructive attempt",
+  },
+  {
+    dim: "Source",
+    typical: "Proprietary",
+    garg: "AGPL-3.0: swift build produces a fully unlocked binary, no trial",
+  },
+];
+---
+
+<section class="border-b border-edge-soft bg-void-deep py-20 sm:py-28">
+  <div class="mx-auto max-w-[1180px] px-5 sm:px-8">
+    <div class="reveal max-w-[42ch]">
+      <h2 class="t-display">Line it up against a typical cleaner.</h2>
+    </div>
+
+    <!-- Desktop: real comparison table -->
+    <div
+      class="reveal mt-10 hidden overflow-hidden rounded-xl border border-edge md:block"
+      style="--reveal-delay: 80ms"
+    >
+      <table class="w-full border-collapse text-left">
+        <caption class="sr-only">
+          A comparison of a typical Mac cleaner versus Gargantua across what you
+          delete, safety, rule authorship, automation, AI, reversibility, and
+          source licensing.
+        </caption>
+        <thead>
+          <tr class="bg-surface-2">
+            <th scope="col" class="w-[22%] px-5 py-4">
+              <span class="sr-only">Dimension</span>
+            </th>
+            <th scope="col" class="px-5 py-4 t-label font-medium text-ink-3">
+              Typical cleaner
+            </th>
+            <th
+              scope="col"
+              class="w-[44%] border-l border-edge-em bg-surface-1 px-5 py-4 t-label"
+            >
+              <span class="inline-flex items-center gap-2">
+                <span
+                  class="inline-block h-2 w-2 rounded-full bg-accretion"
+                  aria-hidden="true"></span>
+                Gargantua
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            rows.map((row, i) => (
+              <tr style={i > 0 ? "border-top:1px solid var(--color-edge-soft)" : ""}>
+                <th
+                  scope="row"
+                  class="px-5 py-4 align-top t-label font-medium text-ink"
+                >
+                  {row.dim}
+                </th>
+                <td class="px-5 py-4 align-top t-body text-ink-3">{row.typical}</td>
+                <td class="border-l border-edge-em bg-surface-1 px-5 py-4 align-top t-body text-ink-2">
+                  {row.garg}
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile: stacked cards so the Gargantua value is never clipped -->
+    <ul class="reveal mt-8 space-y-3 md:hidden" style="--reveal-delay: 80ms">
+      {
+        rows.map((row) => (
+          <li class="overflow-hidden rounded-xl border border-edge bg-surface-1">
+            <p class="border-b border-edge-soft bg-surface-2 px-4 py-2.5 t-label font-medium text-ink">
+              {row.dim}
+            </p>
+            <div class="px-4 py-3">
+              <p class="t-caption font-mono uppercase tracking-wide text-ink-4">
+                Typical cleaner
+              </p>
+              <p class="mt-1 t-body text-ink-3">{row.typical}</p>
+            </div>
+            <div class="border-t border-edge-soft px-4 py-3">
+              <p class="t-caption inline-flex items-center gap-1.5 font-mono uppercase tracking-wide text-accretion">
+                <span class="inline-block h-1.5 w-1.5 rounded-full bg-accretion" aria-hidden="true" />
+                Gargantua
+              </p>
+              <p class="mt-1 t-body text-ink-2">{row.garg}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

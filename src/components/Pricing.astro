@@ -1,0 +1,108 @@
+---
+import CopyCommand from "./CopyCommand.astro";
+
+const sourceIncludes = [
+  "Every scan, every profile, every rule",
+  "The full MCP server and agent automation",
+  "Local + cloud AI explainability",
+  "No trial, no nag, no expiry",
+];
+const licenseIncludes = [
+  "One-click execution of destructive cleanups",
+  "The signed, notarized, auto-updating build",
+  "Scheduled background scans",
+  "Support the project directly",
+];
+---
+
+<section id="pricing" class="scroll-mt-20 border-b border-edge-soft bg-void-deep py-20 sm:py-28">
+  <div class="mx-auto max-w-[1180px] px-5 sm:px-8">
+    <div class="reveal max-w-[48ch]">
+      <p class="t-marker mb-4"><span class="text-accretion">//</span> pricing</p>
+      <h2 class="t-display">Two honest ways to run it.</h2>
+      <p class="t-body-lg mt-5">
+        Scans always run free. The license only gates the
+        <span class="text-ink">execution</span> of destructive actions in the
+        prebuilt app. Build from source and even that is unlocked, forever.
+      </p>
+    </div>
+
+    <div class="reveal mt-12 grid gap-6 lg:grid-cols-2" style="--reveal-delay: 80ms">
+      <!-- source build -->
+      <div class="flex flex-col rounded-2xl border border-edge bg-surface-1 p-8">
+        <div class="flex items-baseline justify-between gap-4">
+          <h3 class="t-headline">Build from source</h3>
+          <span class="font-mono text-[0.8125rem] text-ink-3">AGPL-3.0</span>
+        </div>
+        <p class="mt-4">
+          <span class="font-mono text-[2.5rem] font-semibold leading-none text-ink">Free</span>
+          <span class="t-body ml-2 text-ink-3">forever</span>
+        </p>
+        <p class="t-body mt-4 measure">
+          Clone the repo, run <span class="font-mono text-ink-2">swift build</span>,
+          and you get a fully unlocked binary. The whole app, no asterisk.
+        </p>
+        <ul class="mt-6 space-y-3">
+          {
+            sourceIncludes.map((item) => (
+              <li class="flex items-start gap-2.5 t-body">
+                <svg class="mt-0.5 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-safe)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                <span class="text-ink-2">{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          href="https://github.com/inceptyon-labs/gargantua"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-8 inline-flex items-center justify-center gap-2 rounded-md border border-edge-em bg-surface-3 px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:border-edge-em hover:bg-surface-4"
+        >
+          Clone on GitHub
+        </a>
+      </div>
+
+      <!-- license -->
+      <div class="relative flex flex-col rounded-2xl border border-edge bg-surface-1 p-8" style="border-top: 2px solid var(--color-accretion)">
+        <div class="flex items-baseline justify-between gap-4">
+          <h3 class="t-headline">One-time license</h3>
+          <span class="rounded-full bg-surface-3 px-2.5 py-1 font-mono text-[0.6875rem] uppercase tracking-wide text-ink-2">No subscription</span>
+        </div>
+        <p class="mt-4 flex items-baseline gap-2">
+          <span class="font-mono text-[2.5rem] font-semibold leading-none text-ink">$29</span>
+          <span class="t-body text-ink-3">one-time</span>
+        </p>
+        <p class="t-body mt-4 measure">
+          Skip the toolchain. Get the signed, notarized build with Sparkle
+          auto-updates, and unlock one-click execution of destructive cleanups.
+        </p>
+        <ul class="mt-6 space-y-3">
+          {
+            licenseIncludes.map((item) => (
+              <li class="flex items-start gap-2.5 t-body">
+                <svg class="mt-0.5 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-accretion)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                <span class="text-ink-2">{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          href="https://github.com/inceptyon-labs/gargantua/releases"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-8 inline-flex items-center justify-center gap-2 rounded-md bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-bright"
+        >
+          Get the build
+        </a>
+      </div>
+    </div>
+
+    <div class="reveal mx-auto mt-8 max-w-md" style="--reveal-delay: 160ms">
+      <p class="t-caption mb-2 text-center text-ink-3">Or just install the app:</p>
+      <CopyCommand
+        lines={["brew install --cask gargantua"]}
+        copyText={"brew tap inceptyon-labs/tap\nbrew install --cask gargantua"}
+      />
+    </div>
+  </div>
+</section>

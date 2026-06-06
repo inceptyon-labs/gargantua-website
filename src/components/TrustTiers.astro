@@ -1,0 +1,276 @@
+---
+// Signature "show, don't tell" section. Pairs a real grouped scan with
+// hand-built rows showing per-item classification, paths, and provenance.
+import { Image } from "astro:assets";
+import deepclean from "../assets/screenshots/deepclean.png";
+
+const tiers = [
+  {
+    key: "safe",
+    label: "Safe",
+    color: "var(--color-safe)",
+    blurb: "Disposable, regenerates on demand. Preselected in cleanup flows.",
+  },
+  {
+    key: "review",
+    label: "Review",
+    color: "var(--color-review)",
+    blurb: "Might hold state worth a look. Shown and explained, never auto-selected.",
+  },
+  {
+    key: "protected",
+    label: "Protected",
+    color: "var(--color-protected)",
+    blurb: "System impact or data-loss risk. Visible, but destructive flows hard-reject it.",
+  },
+];
+
+const rows = [
+  {
+    tier: "safe",
+    selected: true,
+    name: "Xcode DerivedData",
+    why: "Build intermediates Xcode regenerates on the next compile.",
+    path: "~/Library/Developer/Xcode/DerivedData",
+    size: "18.4 GB",
+    confidence: 98,
+    rule: "developer/xcode.yaml",
+    commit: "a7c19e4",
+  },
+  {
+    tier: "review",
+    selected: false,
+    name: "Slack cached workspace data",
+    why: "Re-downloads on launch, but holds offline messages until you reconnect.",
+    path: "~/Library/Application Support/Slack/Cache",
+    size: "1.2 GB",
+    confidence: 71,
+    rule: "apps/slack.yaml",
+    commit: "3f0b2da",
+  },
+  {
+    tier: "protected",
+    selected: false,
+    name: "Login keychain",
+    why: "Credential store. A bundled protected-roots policy blocks removal regardless of any rule.",
+    path: "~/Library/Keychains/login.keychain-db",
+    size: "4.1 MB",
+    confidence: 100,
+    rule: "safety_policy/protected_roots.yaml",
+    commit: "locked",
+  },
+];
+
+function tint(color: string, pct: number) {
+  return `color-mix(in oklab, ${color} ${pct}%, transparent)`;
+}
+const tierColor: Record<string, string> = {
+  safe: "var(--color-safe)",
+  review: "var(--color-review)",
+  protected: "var(--color-protected)",
+};
+---
+
+<section id="trust" class="scroll-mt-20 border-b border-edge-soft bg-void-deep py-20 sm:py-28">
+  <div class="mx-auto max-w-[1180px] px-5 sm:px-8">
+    <div class="reveal max-w-[44ch]">
+      <p class="t-marker mb-4">
+        <span class="text-accretion">//</span> the trust layer
+      </p>
+      <h2 class="t-display">Three ratings, decided before you see a thing.</h2>
+      <p class="t-body-lg mt-5">
+        Every finding is graded <span class="text-ink">safe</span>,
+        <span class="text-ink">review</span>, or
+        <span class="text-ink">protected</span> by its rule, ahead of any UI. Color
+        is the rating. Here is what a real scan looks like.
+      </p>
+    </div>
+
+    <!-- the real grouped scan, full width -->
+    <figure
+      class="reveal mt-10 overflow-hidden rounded-xl border border-edge bg-surface-1"
+      style="--reveal-delay: 80ms"
+    >
+      <Image
+        src={deepclean}
+        alt="Gargantua's Deep Clean results grouped by safety: 46 GB safe to clean and preselected, 30 GB held for review, nothing protected selected"
+        widths={[840, 1120, 1680]}
+        sizes="(max-width: 1180px) 100vw, 1120px"
+        class="block w-full border-b border-edge-soft"
+        loading="lazy"
+      />
+      <figcaption class="px-5 py-3 t-caption">
+        A real scan, grouped by rating. Safe is preselected, review is held back,
+        protected is locked out of the selection entirely.
+      </figcaption>
+    </figure>
+
+    <!-- legend: what each rating means -->
+    <div class="reveal mt-6 grid gap-3 sm:grid-cols-3" style="--reveal-delay: 120ms">
+      {
+        tiers.map((t) => (
+          <div
+            class="rounded-lg border border-edge-soft bg-surface-1 p-4"
+            style={`border-top: 2px solid ${t.color}`}
+          >
+            <div class="flex items-center gap-2">
+              <span
+                class="inline-block h-2 w-2 rounded-full"
+                style={`background:${t.color}`}
+                aria-hidden="true"
+              />
+              <span class="t-label" style={`color:${t.color}`}>
+                {t.label}
+              </span>
+            </div>
+            <p class="t-caption mt-2 leading-relaxed">{t.blurb}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="reveal t-body mt-10 measure" style="--reveal-delay: 120ms">
+      Open a group and every item carries its own evidence: the rule it came from,
+      its upstream commit, the exact path and size, and a confidence score.
+    </p>
+
+    <!-- the scan table -->
+    <div
+      class="reveal mt-4 overflow-hidden rounded-xl border border-edge bg-surface-1"
+      style="--reveal-delay: 160ms"
+    >
+      <div
+        class="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-edge-soft px-5 py-3"
+      >
+        <span class="t-caption font-mono text-ink-3">Deep Clean</span>
+        <span class="t-caption font-mono text-ink-4">·</span>
+        <span class="t-caption font-mono text-ink-3">3 findings shown</span>
+        <span
+          class="ml-auto whitespace-nowrap rounded-md bg-surface-3 px-2.5 py-1 font-mono text-[0.75rem] tabular-nums text-ink-2"
+        >
+          19.6 GB selected
+        </span>
+      </div>
+
+      <ul role="list">
+        {
+          rows.map((row, i) => (
+            <li
+              class="grid grid-cols-[auto_1fr_auto] items-start gap-x-4 gap-y-2 px-5 py-4 sm:grid-cols-[auto_1fr_auto_auto]"
+              style={`background:${tint(tierColor[row.tier], 9)}; ${i > 0 ? "border-top:1px solid var(--color-edge-soft)" : ""}`}
+            >
+              {/* checkbox + tier marker */}
+              <div class="flex items-center gap-3 pt-0.5">
+                <span
+                  class="grid h-[18px] w-[18px] place-items-center rounded border"
+                  style={
+                    row.selected
+                      ? `background:${tierColor[row.tier]};border-color:${tierColor[row.tier]}`
+                      : "border-color:var(--color-edge-em)"
+                  }
+                  aria-hidden="true"
+                >
+                  {row.selected && (
+                    <svg
+                      width="11"
+                      height="11"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#0F1115"
+                      stroke-width="3.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                  )}
+                </span>
+              </div>
+
+              {/* name + why + path */}
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="t-label">{row.name}</span>
+                  <span
+                    class="rounded px-1.5 py-0.5 font-mono text-[0.6875rem] font-medium uppercase tracking-wide"
+                    style={`color:${tierColor[row.tier]};background:${tint(tierColor[row.tier], 16)}`}
+                  >
+                    {row.tier}
+                  </span>
+                </div>
+                <p class="t-caption mt-1 leading-relaxed text-ink-2">{row.why}</p>
+                <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <code class="t-mono-path truncate" title={row.path}>
+                    {row.path}
+                  </code>
+                  <span class="inline-flex items-center gap-1.5 rounded bg-surface-2 px-2 py-0.5 t-caption font-mono text-ink-3">
+                    <svg
+                      width="11"
+                      height="11"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="3" />
+                      <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+                    </svg>
+                    {row.rule}
+                    <span class="text-ink-4">@{row.commit}</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* confidence orbit */}
+              <div class="hidden flex-col items-center pt-1 sm:flex" aria-hidden="true">
+                <div class="relative h-10 w-10">
+                  <svg width="40" height="40" viewBox="0 0 40 40">
+                    <circle
+                      cx="20"
+                      cy="20"
+                      r="15"
+                      fill="none"
+                      stroke="var(--color-surface-3)"
+                      stroke-width="3"
+                    />
+                    <circle
+                      cx="20"
+                      cy="20"
+                      r="15"
+                      fill="none"
+                      stroke={tierColor[row.tier]}
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-dasharray={`${(row.confidence / 100) * 94.2} 94.2`}
+                      transform="rotate(-90 20 20)"
+                    />
+                  </svg>
+                  <span class="absolute inset-0 grid place-items-center font-mono text-[0.75rem] tabular-nums text-ink">
+                    {row.confidence}
+                  </span>
+                </div>
+                <span class="t-caption mt-1 text-ink-4">confidence</span>
+              </div>
+
+              {/* size */}
+              <div class="text-right">
+                <span class="font-mono text-[0.9375rem] font-medium tabular-nums text-ink">
+                  {row.size}
+                </span>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <p class="reveal t-caption mt-4 text-ink-3" style="--reveal-delay: 200ms">
+      Optional on-device or cloud AI can elaborate on any rating. It can never
+      lower one: a <span class="text-protected">protected</span> item stays
+      protected no matter what a model says.
+    </p>
+  </div>
+</section>

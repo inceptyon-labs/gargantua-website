@@ -1,0 +1,103 @@
+---
+// A terminal-style install command block with a copy button.
+// `lines` are the literal shell commands; `copyText` is what lands on the
+// clipboard (defaults to the lines joined by newlines).
+interface Props {
+  lines: string[];
+  copyText?: string;
+  class?: string;
+}
+const { lines, copyText, class: className = "" } = Astro.props;
+const payload = copyText ?? lines.join("\n");
+---
+
+<div
+  class={`group relative overflow-hidden rounded-lg border border-edge bg-surface-1 ${className}`}
+  data-copy-cmd
+>
+  <!-- title bar -->
+  <div
+    class="flex items-center gap-2 border-b border-edge-soft px-4 py-2.5"
+  >
+    <span class="flex gap-1.5" aria-hidden="true">
+      <span class="h-2.5 w-2.5 rounded-full bg-surface-4"></span>
+      <span class="h-2.5 w-2.5 rounded-full bg-surface-4"></span>
+      <span class="h-2.5 w-2.5 rounded-full bg-surface-4"></span>
+    </span>
+    <span class="t-caption ml-1 font-mono">zsh</span>
+    <button
+      type="button"
+      data-copy-trigger
+      data-copy-text={payload}
+      class="ml-auto inline-flex items-center gap-1.5 rounded-md border border-edge bg-surface-2 px-2.5 py-1 text-xs font-medium text-ink-2 transition-colors hover:border-edge-em hover:text-ink focus-visible:text-ink"
+      aria-label="Copy install commands to clipboard"
+    >
+      <svg
+        data-copy-icon
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect width="13" height="13" x="9" y="9" rx="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+      <span data-copy-label>Copy</span>
+    </button>
+  </div>
+  <!-- commands -->
+  <div class="px-4 py-3.5 font-mono text-[0.8125rem] leading-relaxed">
+    {
+      lines.map((line) => (
+        <div class="flex items-start gap-2.5">
+          <span class="select-none text-accretion" aria-hidden="true">
+            $
+          </span>
+          <code class="text-ink">{line}</code>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-copy-trigger]").forEach(
+    (btn) => {
+      const label = btn.querySelector<HTMLElement>("[data-copy-label]");
+      const original = label?.textContent ?? "Copy";
+      btn.addEventListener("click", async () => {
+        const text = btn.getAttribute("data-copy-text") ?? "";
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          // Fallback for non-secure contexts
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand("copy");
+          } catch {
+            /* give up silently */
+          }
+          ta.remove();
+        }
+        if (label) {
+          label.textContent = "Copied";
+          btn.classList.add("text-safe");
+          window.setTimeout(() => {
+            label.textContent = original;
+            btn.classList.remove("text-safe");
+          }, 1600);
+        }
+      });
+    },
+  );
+</script>

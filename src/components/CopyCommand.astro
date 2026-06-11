@@ -50,15 +50,15 @@ const payload = copyText ?? lines.join("\n");
       <span data-copy-label>Copy</span>
     </button>
   </div>
-  <!-- commands -->
-  <div class="px-4 py-3.5 font-mono text-[0.8125rem] leading-relaxed">
+  <!-- commands: never wrap a shell line; overflow scrolls horizontally -->
+  <div class="overflow-x-auto px-4 py-3.5 font-mono text-[0.8125rem] leading-relaxed">
     {
       lines.map((line) => (
         <div class="flex items-start gap-2.5">
           <span class="select-none text-accretion" aria-hidden="true">
             $
           </span>
-          <code class="text-ink">{line}</code>
+          <code class="whitespace-pre text-ink">{line}</code>
         </div>
       ))
     }

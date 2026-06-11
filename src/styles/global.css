@@ -14,11 +14,11 @@
   --color-surface-3: #272a30;
   --color-surface-4: #2e3138;
 
-  /* Ink ramp */
+  /* Ink ramp (ink-3 stays ≥4.5:1 on void for caption-size text) */
   --color-ink: #edf0f3;
   --color-ink-2: #9ba4b0;
-  --color-ink-3: #67707e;
-  --color-ink-4: #464a53;
+  --color-ink-3: #7e8796;
+  --color-ink-4: #51565f;
 
   /* Borders (white-alpha, structural) */
   --color-edge: #ffffff12;
@@ -219,10 +219,10 @@
 
   [data-reveal-ready] .reveal {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(14px);
     transition:
-      opacity 0.7s var(--ease-out-expo),
-      transform 0.7s var(--ease-out-expo);
+      opacity 0.55s var(--ease-out-expo),
+      transform 0.55s var(--ease-out-expo);
     transition-delay: var(--reveal-delay, 0ms);
     will-change: opacity, transform;
   }

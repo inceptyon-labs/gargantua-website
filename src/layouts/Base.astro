@@ -52,7 +52,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
         "(prefers-reduced-motion: no-preference)",
       ).matches;
 
-      if (motionOK && "IntersectionObserver" in window) {
+      // Deep links (/#pricing) skip the entrance entirely: the reader landed
+      // mid-page and must never meet a blank viewport.
+      if (motionOK && "IntersectionObserver" in window && !location.hash) {
         document.documentElement.setAttribute("data-reveal-ready", "");
         const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
         const io = new IntersectionObserver(
@@ -64,9 +66,38 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
               }
             }
           },
-          { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
+          // Top margin extends a full viewport up so content approached by
+          // scrolling back up is already revealed before it enters.
+          { rootMargin: "100% 0px -8% 0px", threshold: 0 },
         );
-        for (const el of els) io.observe(el);
+        for (const el of els) {
+          // Anything already in the first viewport reveals instantly.
+          if (el.getBoundingClientRect().top < window.innerHeight * 0.92) {
+            el.classList.add("is-in");
+          } else {
+            io.observe(el);
+          }
+        }
+
+        // Any in-page jump (nav click, hash change) reveals everything at
+        // once; the staged entrance is for the first linear read only.
+        const revealAll = () => {
+          for (const el of els) el.classList.add("is-in");
+          io.disconnect();
+        };
+        document.addEventListener("click", (ev) => {
+          const target = ev.target;
+          if (!(target instanceof Element)) return;
+          const a = target.closest<HTMLAnchorElement>('a[href*="#"]');
+          if (
+            a &&
+            a.origin === location.origin &&
+            a.pathname === location.pathname
+          ) {
+            revealAll();
+          }
+        });
+        window.addEventListener("hashchange", revealAll);
       }
     </script>
   </body>

@@ -16,7 +16,7 @@ const links = [
   data-nav
 >
   <nav
-    class="mx-auto flex h-16 max-w-[1180px] items-center gap-6 px-5 sm:px-8"
+    class="mx-auto flex h-16 max-w-[1180px] items-center gap-3 px-4 sm:gap-6 sm:px-8"
     aria-label="Primary"
   >
     <a href="#top" class="flex items-center" aria-label="Gargantua home">
@@ -44,7 +44,7 @@ const links = [
 
     <a
       href="#install"
-      class="ml-auto inline-flex items-center gap-2 rounded-md bg-accent px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-bright focus-visible:bg-accent-bright md:ml-0"
+      class="ml-auto inline-flex items-center gap-2 rounded-md bg-accent px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-bright focus-visible:bg-accent-bright sm:px-3.5 md:ml-0"
     >
       <svg
         width="15"
@@ -63,14 +63,79 @@ const links = [
       </svg>
       Install
     </a>
+
+    <button
+      type="button"
+      data-menu-toggle
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-label="Open menu"
+      class="grid h-9 w-9 shrink-0 place-items-center rounded-md text-ink-2 transition-colors hover:text-ink md:hidden"
+    >
+      <svg
+        data-icon-open
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M4 7h16M4 12h16M4 17h16"></path>
+      </svg>
+      <svg
+        data-icon-close
+        class="hidden"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M6 6l12 12M18 6 6 18"></path>
+      </svg>
+    </button>
   </nav>
+
+  <div
+    id="mobile-menu"
+    hidden
+    class="border-t border-edge-soft bg-void/95 backdrop-blur-md md:hidden"
+  >
+    <ul class="mx-auto max-w-[1180px] px-5 py-3 sm:px-8">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="block py-3 text-[0.9375rem] font-medium text-ink-2 transition-colors hover:text-ink"
+              {...link.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {}}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
 </header>
 
 <script>
   const nav = document.querySelector<HTMLElement>("[data-nav]");
+  const menu = document.getElementById("mobile-menu");
+  const menuToggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  let menuOpen = false;
+
   if (nav) {
     const onScroll = () => {
-      if (window.scrollY > 24) {
+      if (window.scrollY > 24 || menuOpen) {
         nav.classList.add(
           "border-edge-soft",
           "bg-void/80",
@@ -86,6 +151,27 @@ const links = [
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+
+    if (menu && menuToggle) {
+      const iconOpen = menuToggle.querySelector("[data-icon-open]");
+      const iconClose = menuToggle.querySelector("[data-icon-close]");
+      const setMenu = (open: boolean) => {
+        menuOpen = open;
+        menu.hidden = !open;
+        menuToggle.setAttribute("aria-expanded", String(open));
+        menuToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        iconOpen?.classList.toggle("hidden", open);
+        iconClose?.classList.toggle("hidden", !open);
+        onScroll();
+      };
+      menuToggle.addEventListener("click", () => setMenu(!menuOpen));
+      menu.addEventListener("click", (ev) => {
+        if (ev.target instanceof Element && ev.target.closest("a")) setMenu(false);
+      });
+      window.addEventListener("keydown", (ev) => {
+        if (ev.key === "Escape" && menuOpen) setMenu(false);
+      });
+    }
   }
 
   // Scroll-spy: mark the nav link for the section currently in view.

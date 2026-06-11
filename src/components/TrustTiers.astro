@@ -74,9 +74,6 @@ const tierColor: Record<string, string> = {
 <section id="trust" class="scroll-mt-20 border-b border-edge-soft bg-void-deep py-20 sm:py-28">
   <div class="mx-auto max-w-[1180px] px-5 sm:px-8">
     <div class="reveal max-w-[44ch]">
-      <p class="t-marker mb-4">
-        <span class="text-accretion">//</span> the trust layer
-      </p>
       <h2 class="t-display">Three ratings, decided before you see a thing.</h2>
       <p class="t-body-lg mt-5">
         Every finding is graded <span class="text-ink">safe</span>,
@@ -219,7 +216,7 @@ const tierColor: Record<string, string> = {
                       <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
                     </svg>
                     {row.rule}
-                    <span class="text-ink-4">@{row.commit}</span>
+                    <span class="text-ink-3">@{row.commit}</span>
                   </span>
                 </div>
               </div>
@@ -252,7 +249,7 @@ const tierColor: Record<string, string> = {
                     {row.confidence}
                   </span>
                 </div>
-                <span class="t-caption mt-1 text-ink-4">confidence</span>
+                <span class="t-caption mt-1 text-ink-3">confidence</span>
               </div>
 
               {/* size */}

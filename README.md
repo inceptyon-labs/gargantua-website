@@ -3,7 +3,7 @@
 
   # gargantua-website
 
-  Marketing site for **[Gargantua](https://gargantua.app)** — the open, auditable, agent-drivable macOS cleaner.
+  Marketing site for **[Gargantua](https://gargantua.inceptyon.io)** — the open, auditable, agent-drivable macOS cleaner.
 
   [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
   [![Built with Astro](https://img.shields.io/badge/Built%20with-Astro-ff5d01.svg)](https://astro.build)
@@ -40,7 +40,7 @@ Apple Silicon, macOS 14 (Sonoma) or newer.
 
 - [Astro 5](https://astro.build) — static output, zero client JS by default
 - [Tailwind CSS 4](https://tailwindcss.com) via the Vite plugin
-- Deployed to [gargantua.app](https://gargantua.app)
+- Deployed to [gargantua.inceptyon.io](https://gargantua.inceptyon.io)
 
 ## Develop
 
